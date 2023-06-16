@@ -6,8 +6,10 @@ import numpy as np
 l = 1024
 
 # parameter t is the threshold
-
+t = 100
 # R is a family of t-wise independent hash functions
+
+# ***** SAMPLING *****
 
 # Steps:
 # [done]  1) determine suitable values for k, p, m
@@ -35,3 +37,20 @@ p = 2**61 - 1
 R = [generate_hash_function(k, p, m) for i in range(k)]
 
 A = np.random.randint(0, p, size=(l, m))
+
+
+# ***** HASHING *****
+def encode(X):
+    # X is a list
+    H = np.zeros((l, k, 2*t))
+    for x in X:
+        for i in range(k):
+            Ae = 0
+            print(i)
+            print(R[i](x))
+            print(H[i, R[i](x)])
+
+x = [np.random.randint(0, 2) for i in range(l)]
+X = [2*i - x[i] for i in range(l)]
+
+encode(X)

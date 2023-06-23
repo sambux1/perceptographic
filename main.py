@@ -1,56 +1,59 @@
 import numpy as np
-# parameter k
-# k >= 2 log_(3/e)m
+import galois
+import imagehash
+from PIL import Image
+from ajtai import generate_ajtai_hash_function
 
-# input length
-l = 1024
+# input  : array of base 3 values
+# outout : hex string
+def base3_to_hex(x):
+    base10 = 0
+    for val in x:
+        base10 *= 3
+        base10 += val
+    return hex(base10)
 
-# parameter t is the threshold
-t = 100
-# R is a family of t-wise independent hash functions
+# input  : array of base n values
+# outout : hex string
+def base_n_to_hex(x, base):
+    base_n = 0
+    for val in x:
+        base_n *= base
+        base_n += val
+    return hex(base_n)
 
-# ***** SAMPLING *****
+n = 1093
+t = 16
+k = n - 2*t # 1061
 
-# Steps:
-# [done]  1) determine suitable values for k, p, m
-# [done]  2) implement a family of t-wise independent hash functions, R
-# [done]  3) sample k functions r_i from R
+# input should be a PIL Image object
+def perceptographic(img):
+    # percpetually hash the image
+    phash = imagehash.phash(img, hash_size=34)
 
-# generate a function from k-wise independent hash function family R
-# p is prime modulus, m is number of buckets
-# return value is a function
-def generate_hash_function(k, p, m):
-    a = np.random.randint(1, p, size=(k))
-    
-    def func(x):
-        i = np.array([j for j in range(k)])
-        x_arr = np.array([x for j in range(k)])
-        powers = x_arr ** i
-        products = a * powers
-        return (np.sum(products) % p) % m
-    
-    return func
+    # cut off part of the phash for now and flatten it
+    x = phash.hash.flatten()[:1093]
 
-k = 200
-m = 2 * l
-p = 2**61 - 1
-R = [generate_hash_function(k, p, m) for i in range(k)]
+    # sample and call the homomorphic collision-resistant hash function
+    g = generate_ajtai_hash_function(1093, 128, 3)
+    gx = g(x)
 
-A = np.random.randint(0, p, size=(l, m))
+    # create the Reed Solomon code and parity check matrix
+    gf = galois.GF(3**7)
+    rs = galois.ReedSolomon(n, k, field=gf)
+
+    # find the result of applying the parity check matrix to the phash
+    Px = np.matmul(rs.H.view(np.ndarray), x)
+    Px = np.mod(Px, 3**7)
+
+    gx_hex = base3_to_hex(gx.tolist())
+    Px_hex = base_n_to_hex(Px.tolist(), 3**7)
+
+    output = Px_hex + gx_hex[2:]
+    return output
 
 
-# ***** HASHING *****
-def encode(X):
-    # X is a list
-    H = np.zeros((l, k, 2*t))
-    for x in X:
-        for i in range(k):
-            Ae = 0
-            print(i)
-            print(R[i](x))
-            print(H[i, R[i](x)])
+# TESTING CODE
 
-x = [np.random.randint(0, 2) for i in range(l)]
-X = [2*i - x[i] for i in range(l)]
-
-encode(X)
+img = Image.open('/home/sam/pictures/carina_nebula.jpg')
+print(perceptographic(img))

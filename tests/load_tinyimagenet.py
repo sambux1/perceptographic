@@ -50,7 +50,10 @@ def load_dataset():
 
     images = []
     for folder in folders:
+        if folder==".DS_Store":
+            continue
         folder_path = 'dataset/tiny-imagenet-200/train/' + folder + '/images/'
+
         image_paths = os.listdir(folder_path)
         images.append([(folder_path + path) for path in image_paths])
 

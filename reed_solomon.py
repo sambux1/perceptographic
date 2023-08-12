@@ -17,3 +17,11 @@ print(Px.shape)
 
 Px = Px.view(np.ndarray)
 print(np.mod(Px, 3))
+
+# might be useful for syndrome list decoding
+'''
+print(rs.t)
+print(rs.roots.size)
+for root in rs.roots:
+    print(root)
+'''

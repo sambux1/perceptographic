@@ -55,5 +55,5 @@ def perceptographic(img):
 
 # TESTING CODE
 
-img = Image.open('/home/sam/pictures/carina_nebula.jpg')
+img = Image.open('/home/sam/Pictures/carina-nebula.jpg')
 print(perceptographic(img))

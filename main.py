@@ -3,6 +3,7 @@ import galois
 import imagehash
 from PIL import Image
 from ajtai import generate_ajtai_hash_function
+from pedersen import generate_pedersen_hash_function
 
 # input  : array of base 3 values
 # outout : hex string
@@ -32,11 +33,14 @@ def perceptographic(img):
     phash = imagehash.phash(img, hash_size=34)
 
     # cut off part of the phash for now and flatten it
-    x = phash.hash.flatten()[:1093]
+    x = phash.hash.flatten()[:1093].astype(int)
 
     # sample and call the homomorphic collision-resistant hash function
-    g = generate_ajtai_hash_function(1093, 128, 3)
+    g = generate_pedersen_hash_function(1093)
     gx = g(x)
+    print(gx)
+    return
+    #TODO: fix this
 
     # create the Reed Solomon code and parity check matrix
     gf = galois.GF(3**7)

@@ -9,12 +9,10 @@ parameters = dict([
     (32, [  4294967087,
             2147483543,
             2670277021]),
-    (64, [  1,
-            2,
-            3])
+    (36, [  68719476599,
+            34359738299,
+            3863259943])
 ])
-
-
 def get_parameters(security_parameter):
     #TODO: ensure security parameter is in the dictionary
     params = parameters[security_parameter]
@@ -49,7 +47,7 @@ def generate_pedersen_hash_function(n, security):
 
 
 # testing
-'''
+
 n = 1024
 h = generate_pedersen_hash_function(n, security=32)
 
@@ -60,6 +58,7 @@ x2 = np.array([random.randint(0, 1) for i in range(n)])
 
 p, q, _ = get_parameters(32)
 diff = (x1 - x2) % q
+print(diff)
 
 gf = galois.GF(p)
 
@@ -70,4 +69,3 @@ print('actual:', h(diff))
 y1 = gf(y1)
 y2 = gf(y2)
 print('correct:', y1 / y2)
-'''

@@ -19,10 +19,10 @@ class PPH(ABC):
         pass
     
     @abstractmethod
-    def hash(h, x):
+    def hash(self, x):
         pass
     
     @abstractmethod
-    def evaluate(h, y1, y2):
+    def evaluate(self, y1, y2):
         pass
     

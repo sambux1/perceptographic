@@ -8,8 +8,8 @@ import math
 # outout : hex string
 def base_n_to_hex(x, base):
     # calculate the width of the output value
-
     num_hex_symbols = math.ceil(len(x) / math.log(16, base))
+
     base_n = 0
     for val in x:
         base_n *= base
@@ -20,10 +20,16 @@ def base_n_to_hex(x, base):
 
 # input  : hex string
 # outout : array of base n values
-def hex_to_base_n(x, base):
-    return numberToBase(int(x, 16), base)
+def hex_to_base_n(x, base, bits):
+    arr = numberToBase(int(x, 16), base)
 
-#TODO: clean this up
+    # pad with leading zeros until length equals bits
+    while len(arr) < bits:
+        arr.insert(0, 0)
+    
+    return arr
+
+# convert an integer into an array of digits of base b
 def numberToBase(x, b):
     if x == 0:
         return [0]
@@ -31,4 +37,5 @@ def numberToBase(x, b):
     while x:
         digits.append(int(x % b))
         x //= b
+    # reverse digits before returning
     return digits[::-1]

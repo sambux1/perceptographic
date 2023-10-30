@@ -12,7 +12,7 @@ import galois
 import math
 
 
-class NonRobust(PPH):
+class TempNonRobust(PPH):
     
     def __init__(self, n, m, t, parameter=None):
         self.sample(parameter, n, m, t)
@@ -68,8 +68,8 @@ class NonRobust(PPH):
     @staticmethod
     def _generate_random_matrix(n, m):
         return np.random.randint(0, 2, size=(m, n))
-    
-    
+
+
 import random
 if __name__ == '__main__':
     pph = NonRobust(1023, 10, 20)

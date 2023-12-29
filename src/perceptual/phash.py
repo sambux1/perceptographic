@@ -1,8 +1,7 @@
 # a wrapper for the phash algorithm
 # https://github.com/JohannesBuchner/imagehash
 
-from perceptual import Perceptual
-from image import Image
+from src.perceptual import Perceptual, Image
 import math
 
 from imagehash import phash

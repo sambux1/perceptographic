@@ -5,11 +5,12 @@ the following paper by Boyle et. al.
 https://eprint.iacr.org/2018/1158.pdf
 '''
 
-from pph import PPH
+from src.pph import PPH
 import math
 import numpy as np
 
-class NonRobust(PPH):
+
+class Nonrobust(PPH):
     
     def __init__(self, n, m, t, eps=0.25):
         # epsilon and security parameter are dependent on each other

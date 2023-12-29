@@ -4,7 +4,9 @@ iniconfig==2.0.0
 llvmlite==0.40.1rc1
 numba==0.57.0
 numpy==1.24.3
+opencv-python==4.8.1.78
 packaging==23.1
+pdqhash==0.2.5
 Pillow==9.5.0
 pluggy==1.2.0
 pytest==7.4.0

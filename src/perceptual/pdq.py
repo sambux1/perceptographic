@@ -2,15 +2,30 @@
 # https://github.com/faustomorales/pdqhash-python
 
 from perceptual import Perceptual
+from image import Image
+
+import pdqhash
 
 
 class PDQ(Perceptual):
 
-    def __init__(self, hash_length):
+    def __init__(self):
         pass
     
     def hash(self, img):
-        pass
+        img = img.get_cv2_image()
+        hash_vector, quality = pdqhash.compute(img)
+        return hash_vector
     
     def evaluate(self, h1, h2):
         pass
+
+if __name__ == '__main__':
+    print('hey')
+    pdq = PDQ()
+    filename = '/home/sam/Downloads/carina-nebula.jpg'
+    img = Image(filename)
+    v = pdq.hash(img)
+    print(v)
+
+#TODO: figure out parameters

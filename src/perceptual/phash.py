@@ -2,8 +2,8 @@
 # https://github.com/JohannesBuchner/imagehash
 
 from perceptual import Perceptual
+from image import Image
 import math
-from PIL import Image
 
 from imagehash import phash
 
@@ -22,13 +22,15 @@ class PHash(Perceptual):
             self.hash_size = math.ceil(hash_len_sqrt)
             print('Warning: phash hash_length must be a perfect square. Rounding up to the next perfect square.')
     
-    # helper function to see which hash size is being used
+    # helper function to see which hash length is being used
     #   since parameter passed on creation may be modified
-    def get_hash_size(self):
-        return self.hash_size
+    def get_hash_length(self):
+        # the length of the output is the square of the hash_size parameter
+        return self.hash_size * self.hash_size
 
-    # input is a PIL.Image object
+    # input is a perceptographic.Image object
     def hash(self, img):
+        img = img.get_pil_image()
         return phash(img, self.hash_size)
     
     def evaluate(self, h1, h2):
@@ -37,7 +39,7 @@ class PHash(Perceptual):
 
 if __name__ == '__main__':
     print("hey")
-    img = Image.open('/home/sam/Downloads/carina-nebula.jpg')
+    img = Image('/home/sam/Downloads/carina-nebula.jpg')
     p = PHash(145)
     h = p.hash(img)
     print(p.get_hash_size())

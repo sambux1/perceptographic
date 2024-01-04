@@ -5,7 +5,7 @@ the following paper by Boyle et. al.
 https://eprint.iacr.org/2018/1158.pdf
 '''
 
-from src.pph import PPH
+from perceptographic.pph import PPH
 import math
 import numpy as np
 

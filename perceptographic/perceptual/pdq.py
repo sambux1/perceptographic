@@ -1,7 +1,7 @@
 # a wrapper for the PDQ algorithm (Facebook)
 # https://github.com/faustomorales/pdqhash-python
 
-from src.perceptual import Perceptual, Image
+from perceptographic.perceptual import Perceptual, Image
 
 import pdqhash
 

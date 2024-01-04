@@ -1,7 +1,7 @@
-from src.perceptual.perceptual import Perceptual
-from src.perceptual.image import Image
-from src.perceptual.phash import PHash
-from src.perceptual.pdq import PDQ
+from perceptographic.perceptual.perceptual import Perceptual
+from perceptographic.perceptual.image import Image
+from perceptographic.perceptual.phash import PHash
+from perceptographic.perceptual.pdq import PDQ
 
 __all__ = [
     'Perceptual',

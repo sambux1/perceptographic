@@ -26,3 +26,10 @@ class PPH(ABC):
     def evaluate(self, y1, y2):
         pass
     
+    # convert binary numpy array to hex string for clean output representation
+    @staticmethod
+    def to_hex(h):
+        str_repr = ''
+        for bit in h:
+            str_repr += str(bit)
+        return hex(int(str_repr, 2))[2:]

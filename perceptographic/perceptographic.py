@@ -1,7 +1,8 @@
 '''
 the main file for perceptographic hash functions
 
-Takes as input a perceptual hash function and a PPH as objects.
+Takes as input either perceptual and pph objects or strings representing
+which algorithms to use to create the objects.
 '''
 
 from perceptographic import perceptual
@@ -12,7 +13,7 @@ class Perceptographic:
 
     def __init__(self, perceptual_algorithm='phash', pph_algorithm='nonrobust',
                        perceptual_length=256, threshold=100, pph_length=64):
-        # setup perceptual hash functtion
+        # setup perceptual hash function
         # check if it is already an object, otherwise make the object
         if isinstance(perceptual_algorithm, perceptual.Perceptual):
             self.perceptual_algorithm = perceptual_algorithm
@@ -23,18 +24,13 @@ class Perceptographic:
         # check if it is already an object, otherwise make the object
         if isinstance(pph_algorithm, pph.PPH):
             self.pph_algorithm = pph_algorith
-            print('got pph')
         else:
             self.pph_algorithm = pph.create(pph_algorithm, perceptual_length, pph_length, threshold)
     
     def hash(self, img):
-        perceptual_hash = self.perceptual.hash(img)
-        # convert to binarynumpy array
-        return self.pph.hash(perceptual_hash)
+        h = self.perceptual_algorithm.hash(img)
+        h_binary = self.perceptual_algorithm.to_np_binary(h)
+        return self.pph_algorithm.hash(h_binary)
     
     def evaluate(self, h1, h2):
         pass
-
-
-if __name__ == '__main__':
-    print('hey')

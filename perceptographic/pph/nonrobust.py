@@ -33,7 +33,7 @@ class Nonrobust(PPH):
         self.A = np.equal(mat, 0)
     
     def hash(self, x):
-        return np.mod(np.matmul(self.A, x), 2)
+        return self.to_hex(np.mod(np.matmul(self.A, x), 2))
     
     def evaluate(self, y1, y2):
         distance = np.count_nonzero(y1 != y2)

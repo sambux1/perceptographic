@@ -1,9 +1,11 @@
 from perceptographic.pph.pph import PPH
 from perceptographic.pph.nonrobust import Nonrobust
+from perceptographic.pph.blv19 import BLV19
 
 __all__ = [
     'PPH',
-    'Nonrobust'
+    'Nonrobust',
+    'BLV19'
 ]
 
 # a function to create and return a property-preserving hash function

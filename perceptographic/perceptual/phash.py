@@ -3,6 +3,7 @@
 
 from perceptographic.perceptual import Perceptual, Image
 import math
+import numpy as np
 from imagehash import phash, ImageHash
 
 
@@ -29,14 +30,13 @@ class PHash(Perceptual):
     # input is a perceptographic.Image object
     def hash(self, img):
         img = img.get_pil_image()
-        return phash(img, self.hash_size)
+        return str(phash(img, self.hash_size))
     
     # get binary numpy array from hash
     @staticmethod
     def to_np_binary(h):
-        assert isinstance(h, ImageHash)
-        # get the underlying bool array, convert to {0,1} and flatten to vector
-        return h.hash.astype(int).flatten()
+        #assert isinstance(h, ImageHash)
+        return np.unpackbits(np.frombuffer(bytes.fromhex(h), dtype=np.uint8))
     
     def evaluate(self, h1, h2):
         pass

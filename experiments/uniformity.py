@@ -1,13 +1,16 @@
 # this is necessary (temporarily) to be able to import the library
 import sys
-import time
 sys.path.insert(1, "../")
 
 from load_tinyimagenet import load_dataset
 import perceptographic
+import numpy as np
 
 category_ids, categories, images = load_dataset()
 
+def hamming_weight(hex_string):
+    bits = np.unpackbits(np.frombuffer(bytes.fromhex(hex_string), dtype=np.uint8))
+    return np.sum(bits)
 
 def normalize_hex(hex_value):
     max_value = int('F' * len(hex_value), 16)
@@ -26,18 +29,17 @@ def test_uniformity(hash_function):
         for image_filename in images[i]:
             img = perceptographic.perceptual.Image(image_filename)
             h = hash_function.hash(img)
-            normalized = normalize_hex(str(h))
-            
-            sum_normalized += normalized
-            max_normalized = max(max_normalized, normalized)
-            min_normalized = min(max_normalized, normalized)
+            #normalized = normalize_hex(str(h))
+            hw = hamming_weight(h)
+            sum_normalized += hw
+            max_normalized = max(max_normalized, hw)
+            min_normalized = min(max_normalized, hw)
         
         sum_normalized /= len(images[i])
         results[category_ids[i]] = (sum_normalized, max_normalized, min_normalized)
     
     return results
-
-
+'''
 perceptual = perceptographic.perceptual.PHash(256)
 results1 = test_uniformity(perceptual)
 max_avg = 0
@@ -56,7 +58,7 @@ for i in range(len(results1)):
 print('Avg: ', min_avg, '-', max_avg)
 print('Max: ', min_max, '-', max_max)
 print('Min: ', min_min, '-', max_min)
-
+'''
 nonrobust = perceptographic.Perceptographic('phash', 'nonrobust', 1600, 200, 256)
 results2 = test_uniformity(nonrobust)
 max_avg = 0
@@ -75,3 +77,4 @@ for i in range(len(results2)):
 print('Avg: ', min_avg, '-', max_avg)
 print('Max: ', min_max, '-', max_max)
 print('Min: ', min_min, '-', max_min)
+

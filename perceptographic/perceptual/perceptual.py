@@ -16,6 +16,7 @@ the perceptual hash algorithm and an integer hash length.
 '''
 
 from abc import ABC, abstractmethod # abstract base class, a Python interface
+import numpy as np
 
 
 class Perceptual(ABC):
@@ -36,9 +37,8 @@ class Perceptual(ABC):
     # the default implementation works on hex strings
     # it can be overridden if the hashes are of a different type
     @staticmethod
-    def to_np_binary(h1):
-        #TODO: implement a default function when hash is hex string
-        pass
+    def to_np_binary(h):
+        return np.unpackbits(np.frombuffer(bytes.fromhex(h), dtype=np.uint8))
     
 if __name__ == '__main__':
     phash = Perceptual.create('phash', 100)

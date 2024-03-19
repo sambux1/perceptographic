@@ -10,6 +10,7 @@ A PPH must implement 3 algorithms
 '''
 
 from abc import ABC, abstractmethod # abstract base class, a Python interface
+import numpy as np
 
 
 class PPH(ABC):
@@ -29,7 +30,4 @@ class PPH(ABC):
     # convert binary numpy array to hex string for clean output representation
     @staticmethod
     def to_hex(h):
-        str_repr = ''
-        for bit in h:
-            str_repr += str(bit)
-        return hex(int(str_repr, 2))[2:]
+        return np.packbits(h).tobytes().hex()

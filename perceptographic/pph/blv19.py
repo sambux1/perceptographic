@@ -11,6 +11,53 @@ import numpy as np
 
 class BLV19(PPH):
 
+    @staticmethod
+    def calculate_output_length(n, d, beta, eps, lam):
+        k = math.log2(1 / beta)
+
+        n_prime = n / (k * beta)
+        d_prime = ((1 - eps) * d) + ((1 + eps) * (d / k))
+        eps_prime = 1 - ((1 - eps) * d / d_prime)
+
+        candidate_1 = 0.1 * lam / (eps_prime**2)
+
+        p = (d_prime * (1 - eps_prime)) / n_prime
+        H_p = (-1 * p * math.log2(p)) - ((1 - p) * math.log2(1 - p))
+        candidate_2 = (n_prime * 3 * math.e**2 * math.log(2) * H_p + 0.01 * lam) / eps_prime
+
+        candidate_3 = 4 * beta * n_prime + 1
+        
+        m = max(candidate_1, candidate_2, candidate_3)
+        return m
+    
+    @staticmethod
+    def find_optimal_parameters(n, d, lam=256, beta_step=0.0001, eps_max=1, eps_step=0.0001):
+        beta_max = 0.01
+        
+        optimal_m = n
+        optimal_beta = 0
+        optimal_eps = 0
+
+        # loop over all possible values of beta
+        beta = beta_step
+        while beta < beta_max:
+            eps = (1 - (1 / (math.log2(1 / beta))) / (1 + (1 / math.log2(1 / beta))))
+            
+            # loop over all possible values of epsilon
+            while eps < eps_max:
+                # calculate the output length for this set of parameters
+                m = BLV19.calculate_output_length(n, d, beta, eps, lam)
+                if m < optimal_m:
+                    optimal_m = m
+                    optimal_beta = beta
+                    optimal_eps = eps
+                
+                eps += eps_step
+
+            beta += beta_step
+        
+        return int(optimal_m), optimal_beta, optimal_eps
+
     def __init__(self, n=1024, d=100, beta=0.005, eps=0.8, lam=100):
         # paper suggests beta < 0.01 for conservative assumption
         if beta >= 0.01:    

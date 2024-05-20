@@ -27,6 +27,7 @@ robust = perceptographic.pph.BLV19(20000, 50, beta=0.0001, eps=0.930009789290597
 '''
 
 import numpy as np
-x = np.random.randint(0, 2, size=(2048))
-polynomial = perceptographic.pph.Polynomial(255)
+x = np.random.randint(0, 2, size=(10))
+print(perceptographic.pph.Polynomial.encode_as_set(x))
+polynomial = perceptographic.pph.Polynomial(251)
 print(polynomial.hash(x))

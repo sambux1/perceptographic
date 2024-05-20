@@ -11,6 +11,19 @@ class Polynomial(PPH):
         self.num_eval_points = num_eval_points
         self.sample()
     
+    # encode a bit string as a set
+    # the output is a set with elements in the range [0, 2*x.size)
+    @staticmethod
+    def encode_as_set(x):
+        # input should be a numpy.ndarray
+        assert(isinstance(x, np.ndarray))
+
+        encoding = set()
+        for i in range(x.size):
+            encoding.add(2*i - x[i] + 1)
+        
+        return encoding
+
     def sample(self):
         self.evaluation_points = np.random.randint(0, self.field_size, size=(self.num_eval_points))
 
@@ -22,9 +35,10 @@ class Polynomial(PPH):
         return ret
     
     def hash(self, x):
+        encoding = self.encode_as_set(x)
         output_bits = np.array([], dtype=int)
         for p in self.evaluation_points:
-            y = self.evaluate_polynomial(x, p)
+            y = self.evaluate_polynomial(encoding, p)
             y_bits = np.array([int(bit) for bit in bin(y)[2:].zfill(self.field_bitwidth)])
             output_bits = np.concatenate((output_bits, y_bits))
         return PPH.to_hex(output_bits)

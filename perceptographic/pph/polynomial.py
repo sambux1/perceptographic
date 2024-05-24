@@ -49,8 +49,8 @@ class Polynomial(PPH):
 
     def evaluate(self, y1, y2):
         # get the bits of the hashes
-        y1 = self.from_hex(y1)
-        y2 = self.from_hex(y2)
+        y1 = self.to_np_binary(y1)
+        y2 = self.to_np_binary(y2)
 
         # get the evaluation points
         evaluated_points = []

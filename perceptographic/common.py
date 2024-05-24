@@ -2,6 +2,12 @@
 import numpy as np
 import fractions
 
+def np_binary_to_hex(x):
+    return np.packbits(x).tobytes().hex()
+
+def hex_to_np_binary(x):
+    return np.unpackbits(np.frombuffer(bytes.fromhex(x), dtype=np.uint8))
+
 def _swap_rows(matrix, r1, r2):
     matrix[[r1, r2]] = matrix[[r2, r1]]
 

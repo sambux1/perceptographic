@@ -11,8 +11,8 @@ class PHash(Perceptual):
 
     def __init__(self, hash_length):
         '''
-        for phash, the hash length must be a square
-        if length is not a square, round up to next square and issue warning
+        For phash, the hash length must be a square.
+        If length is not a square, round up to next square and issue warning.
         '''
         hash_len_sqrt = math.sqrt(hash_length)
         if hash_len_sqrt.is_integer():
@@ -28,24 +28,15 @@ class PHash(Perceptual):
         return self.hash_size * self.hash_size
 
     # input is a perceptographic.Image object
-    def hash(self, img):
+    def hash(self, img, as_hex=False):
         img = img.get_pil_image()
-        return str(phash(img, self.hash_size))
+        h = self.to_hex(phash(img, self.hash_size).hash)
+        ret = self.to_np_binary(h) if as_hex is False else h
+        return ret
     
-    # get binary numpy array from hash
-    @staticmethod
-    def to_np_binary(h):
-        #assert isinstance(h, ImageHash)
-        return np.unpackbits(np.frombuffer(bytes.fromhex(h), dtype=np.uint8))
-    
-    def evaluate(self, h1, h2):
-        pass
-
-
-if __name__ == '__main__':
-    print("hey")
-    img = Image('/home/sam/Downloads/carina-nebula.jpg')
-    p = PHash(145)
-    h = p.hash(img)
-    print(p.get_hash_size())
-    print(h)
+    def evaluate(self, h1, h2, as_hex=False):
+        if as_hex:
+            h1 = self.to_np_binary(h1)
+            h2 = self.to_np_binary(h2)
+        assert(len(h1) == len(h2))
+        return np.sum(h1 != h2)

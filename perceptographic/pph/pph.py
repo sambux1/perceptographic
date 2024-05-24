@@ -31,3 +31,11 @@ class PPH(ABC):
     @staticmethod
     def to_hex(h):
         return np.packbits(h).tobytes().hex()
+
+    # convert hex string to binary numpy array for evaluation
+    @staticmethod
+    def from_hex(h):
+        binary_string = bin(int(h, 16))[2:].zfill(4*len(h))
+        bits = [int(bit) for bit in binary_string]
+        return np.array(bits, dtype=np.uint8)
+    

@@ -25,13 +25,21 @@ class Perceptual(ABC):
     def get_hash_length(self):
         pass
 
+    # hashes can either be binary numpy arrays (if used as part of a perceptographic construction) 
+    #   or hex strings (if used as a standalone function)
     @abstractmethod
-    def hash(self, img):
+    def hash(self, img, as_hex=False):
         pass
     
+    # evaluation should return an integer representing Hamming distance
     @abstractmethod
-    def evaluate(self, h1, h2):
+    def evaluate(self, h1, h2, as_hex=False):
         pass
+    
+    # convert binary numpy array to hex string for clean output representation
+    @staticmethod
+    def to_hex(h):
+        return np.packbits(h).tobytes().hex()
     
     # we need the output of a perceptual hash function to be a binary numpy array
     # the default implementation works on hex strings
@@ -39,7 +47,3 @@ class Perceptual(ABC):
     @staticmethod
     def to_np_binary(h):
         return np.unpackbits(np.frombuffer(bytes.fromhex(h), dtype=np.uint8))
-    
-if __name__ == '__main__':
-    phash = Perceptual.create('phash', 100)
-    pdq = Perceptual.create('pdq', 100)

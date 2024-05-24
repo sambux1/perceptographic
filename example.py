@@ -35,3 +35,22 @@ y2 = polynomial.hash(x2)
 print(y1)
 print(y2)
 polynomial.evaluate(y1, y2)
+
+
+img1 = perceptographic.perceptual.Image('/home/sam/Downloads/snakes.jpg')
+img2 = perceptographic.perceptual.Image('/home/sam/Downloads/carina-nebula.jpg')
+pdq = perceptographic.perceptual.PDQ()
+h1 = pdq.hash(img1, True)
+h2 = pdq.hash(img2, True)
+print(h1)
+print(h2)
+print(pdq.evaluate(h1, h2, True))
+
+phash = perceptographic.perceptual.PHash(145)
+h11 = phash.hash(img1, True)
+h12 = phash.hash(img2, True)
+print(h11)
+print(h12)
+print(phash.evaluate(h11, h12, True))
+
+perceptographic.perceptual.Image.generate_random()

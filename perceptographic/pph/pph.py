@@ -9,6 +9,7 @@ A PPH must implement 3 algorithms
     3) evaluate : takes as input two hashes, returns whether they are similar or not
 '''
 
+import perceptographic.common as common
 from abc import ABC, abstractmethod # abstract base class, a Python interface
 import numpy as np
 
@@ -30,12 +31,10 @@ class PPH(ABC):
     # convert binary numpy array to hex string for clean output representation
     @staticmethod
     def to_hex(h):
-        return np.packbits(h).tobytes().hex()
+        return common.np_binary_to_hex(h)
 
-    # convert hex string to binary numpy array for evaluation
+    # convert hex string to binary numpy array for internal use
     @staticmethod
-    def from_hex(h):
-        binary_string = bin(int(h, 16))[2:].zfill(4*len(h))
-        bits = [int(bit) for bit in binary_string]
-        return np.array(bits, dtype=np.uint8)
+    def to_np_binary(h):
+        return common.hex_to_np_binary(h)
     

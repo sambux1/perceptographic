@@ -15,6 +15,7 @@ a perceptual hash function. It takes as input a string representing
 the perceptual hash algorithm and an integer hash length.
 '''
 
+import perceptographic.common as common
 from abc import ABC, abstractmethod # abstract base class, a Python interface
 import numpy as np
 
@@ -39,11 +40,9 @@ class Perceptual(ABC):
     # convert binary numpy array to hex string for clean output representation
     @staticmethod
     def to_hex(h):
-        return np.packbits(h).tobytes().hex()
-    
-    # we need the output of a perceptual hash function to be a binary numpy array
-    # the default implementation works on hex strings
-    # it can be overridden if the hashes are of a different type
+        return common.np_binary_to_hex(h)
+
+    # convert hex string to binary numpy array for internal use
     @staticmethod
     def to_np_binary(h):
-        return np.unpackbits(np.frombuffer(bytes.fromhex(h), dtype=np.uint8))
+        return common.hex_to_np_binary(h)

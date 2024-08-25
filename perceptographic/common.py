@@ -1,13 +1,65 @@
 # a file for general purpose functions that are useful for many constructions
+import random
 import numpy as np
-import fractions
+from ecpy.curves import Curve, Point
 
+
+'''
+Conversions
+'''
 def np_binary_to_hex(x):
     return np.packbits(x).tobytes().hex()
 
 def hex_to_np_binary(x):
     return np.unpackbits(np.frombuffer(bytes.fromhex(x), dtype=np.uint8))
 
+'''
+Ajtai Hash Function
+(not currently used anywhere)
+'''
+def generate_ajtai_hash_function(n, m, q):
+    # generate the matrix
+    A = np.random.randint(1, q, size=(m, n))
+
+    # create a callable function
+    def h(x):
+        y = np.matmul(A, x)
+        return np.mod(y, q)
+
+    return h
+
+'''
+Pedersen Hash Function
+'''
+def generate_pedersen_hash_function(n):
+    curve = Curve.get_curve('secp256k1')
+    generator = curve.generator
+    order = curve.order
+    rand_scaling_constants = [random.randrange(0, order) for i in range(n)]
+    random_group_elements = []
+    for const in rand_scaling_constants:
+        random_group_elements.append(const * generator)
+    
+    # create a callable function
+    def h(x):
+        assert(len(x) == len(random_group_elements))
+
+        ret = None
+        for i in range(len(x)):
+            point = x[i] * random_group_elements[i]
+            
+            if ret is None:
+                ret = point
+            else:
+                ret = ret + point
+        
+        return ret
+    
+    return h
+
+'''
+Linear Algebra
+'''
 def _swap_rows(matrix, r1, r2):
     matrix[[r1, r2]] = matrix[[r2, r1]]
 

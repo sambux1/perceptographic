@@ -2,12 +2,14 @@ from perceptographic.pph.pph import PPH
 from perceptographic.pph.nonrobust import Nonrobust
 from perceptographic.pph.blv19 import BLV19
 from perceptographic.pph.polynomial import Polynomial
+from perceptographic.pph.hcrhf import HCRHF
 
 __all__ = [
     'PPH',
     'Nonrobust',
     'BLV19',
-    'Polynomial'
+    'Polynomial',
+    'HCRHF'
 ]
 
 # a function to create and return a property-preserving hash function

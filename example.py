@@ -25,7 +25,7 @@ print('(1024, 100) - 0.90: ', perceptographic.pph.BLV19.find_optimal_parameters(
 print('(1024, 100) - 0.85: ', perceptographic.pph.BLV19.find_optimal_parameters(20000, 150, eps_max=0.85))
 robust = perceptographic.pph.BLV19(20000, 50, beta=0.0001, eps=0.9300097892905979)
 '''
-
+'''
 import numpy as np
 x1 = np.random.randint(0, 2, size=(3))
 x2 = np.random.randint(0, 2, size=(3))
@@ -54,3 +54,24 @@ print(h12)
 print(phash.evaluate(h11, h12, True))
 
 perceptographic.perceptual.Image.generate_random()
+
+print(perceptographic.common.generate_ajtai_hash_function(1000, 100, 17))
+'''
+
+import numpy as np
+n = 1000
+x1 = np.random.randint(0, 2, size=(n))
+x2 = x1.copy()
+x2[47] = 1 - x2[47]#np.random.randint(0, 2, size=(n))
+print(x1.sum())
+print(x2.sum())
+x3 = x1 + x2
+hcrhf = perceptographic.pph.HCRHF(n)
+p1 = hcrhf.hash(x1)
+p2 = hcrhf.hash(x2)
+p3 = hcrhf.hash(x3)
+
+hcrhf.evaluate(p1, p2)
+
+#print(p3)
+#print(p1 + p2)

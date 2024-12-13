@@ -59,19 +59,26 @@ print(perceptographic.common.generate_ajtai_hash_function(1000, 100, 17))
 '''
 
 import numpy as np
-n = 1000
+n = 500
 x1 = np.random.randint(0, 2, size=(n))
 x2 = x1.copy()
 x2[47] = 1 - x2[47]#np.random.randint(0, 2, size=(n))
 print(x1.sum())
 print(x2.sum())
 x3 = x1 + x2
-hcrhf = perceptographic.pph.HCRHF(n)
+
+hcrhf = perceptographic.pph.HCRHF(n, 10, 1)
 p1 = hcrhf.hash(x1)
 p2 = hcrhf.hash(x2)
-p3 = hcrhf.hash(x3)
+#p3 = hcrhf.hash(x3)
 
 hcrhf.evaluate(p1, p2)
+hcrhf.evaluate(p2, p1)
 
+#p = perceptographic.Perceptographic('phash', 'hcrhf', 256, 200, 256)
+
+#img = perceptographic.perceptual.Image('/home/sam/Pictures/carina-nebula.jpg')
+
+#h = p.hash(img)
 #print(p3)
 #print(p1 + p2)

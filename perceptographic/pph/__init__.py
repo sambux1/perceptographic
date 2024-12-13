@@ -13,8 +13,10 @@ __all__ = [
 ]
 
 # a function to create and return a property-preserving hash function
-def create(algorithm='nonrobust', input_length=256, output_length=64, threshold=100):
+def create(algorithm='hcrhf', input_length=256, output_length=128, threshold=2):
     algorithm = algorithm.lower()
     match algorithm:
+        case 'hcrhf':
+            return HCRHF(input_length, output_length, threshold)
         case 'nonrobust':
             return Nonrobust(input_length, output_length, threshold)

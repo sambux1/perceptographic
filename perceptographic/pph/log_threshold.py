@@ -1,10 +1,40 @@
 from perceptographic.pph import PPH
 import perceptographic.common as common
 import numpy as np
+import random
 from itertools import combinations, product
+from ecpy.curves import Curve, Point
 
 
-class HCRHF(PPH):
+# sample a Pedersen hash function for input length n and return as a function
+def generate_pedersen_hash_function(n):
+    curve = Curve.get_curve('secp256k1')
+    generator = curve.generator
+    order = curve.order
+    rand_scaling_constants = [random.randrange(0, order) for i in range(n)]
+    random_group_elements = []
+    for const in rand_scaling_constants:
+        random_group_elements.append(const * generator)
+    
+    # create a callable function
+    def h(x):
+        assert(len(x) == len(random_group_elements))
+
+        ret = None
+        for i in range(len(x)):
+            point = x[i] * random_group_elements[i]
+            
+            if ret is None:
+                ret = point
+            else:
+                ret = ret + point
+        
+        return ret
+    
+    return h
+
+
+class LogThreshold(PPH):
 
     def __init__(self, input_length, output_length, threshold):
         self.input_length = input_length
@@ -14,7 +44,7 @@ class HCRHF(PPH):
         self.precompute_hash_table()
 
     def sample(self):
-        self.pedersen = common.generate_pedersen_hash_function(self.input_length)
+        self.pedersen = generate_pedersen_hash_function(self.input_length)
 
     def precompute_hash_table(self):
         self.error_hashes = []

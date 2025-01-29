@@ -67,13 +67,13 @@ print(x1.sum())
 print(x2.sum())
 x3 = x1 + x2
 
-hcrhf = perceptographic.pph.HCRHF(n, 10, 1)
-p1 = hcrhf.hash(x1)
-p2 = hcrhf.hash(x2)
+pph = perceptographic.pph.LogThreshold(n, 10, 1)
+p1 = pph.hash(x1)
+p2 = pph.hash(x2)
 #p3 = hcrhf.hash(x3)
 
-hcrhf.evaluate(p1, p2)
-hcrhf.evaluate(p2, p1)
+pph.evaluate(p1, p2)
+pph.evaluate(p2, p1)
 
 #p = perceptographic.Perceptographic('phash', 'hcrhf', 256, 200, 256)
 

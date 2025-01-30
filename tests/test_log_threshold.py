@@ -48,3 +48,38 @@ class TestLogThreshold(TestCase):
 
         # check that result point is identical to original point
         self.assertTrue(point == ret)
+    
+    # test the correctness of the hash function
+    def test_correctness(self):
+        # sample a hash function
+        input_length = 256
+        threshold = 1
+        pph = perceptographic.pph.LogThreshold(input_length, threshold)
+
+        # generate a random input element
+        x = np.random.randint(0, 2, size=(input_length))
+
+        # generate an input element close to the original
+        x_close = x.copy()
+        flip_index = random.randint(0, input_length)
+        x_close[flip_index] = 1 - x[flip_index]
+
+        # generate an input one bit beyond the threshold
+        x_far = x.copy()
+        flipped_indices = []
+        while len(flipped_indices) != threshold + 1:
+            flip_index = random.randint(0, input_length)
+            if flip_index in flipped_indices:
+                continue
+            x_far[flip_index] = 1 - x[flip_index]
+            flipped_indices.append(flip_index)
+        
+        # hash all inputs
+        y = pph.hash(x)
+        y_close = pph.hash(x_close)
+        y_far = pph.hash(x_far)
+
+        # make sure the evaluations are correct
+        self.assertTrue(pph.evaluate(y, y_close))
+        self.assertFalse(pph.evaluate(y, y_far))
+            

@@ -9,10 +9,10 @@ __all__ = [
 ]
 
 # a function to create and return a property-preserving hash function
-def create(algorithm='log_threshold', input_length=256, output_length=128, threshold=2):
+def create(algorithm='log_threshold', input_length=1024, output_length=128, threshold=2):
     algorithm = algorithm.lower()
     match algorithm:
         case 'log_threshold':
-            return LogThreshold(input_length, output_length, threshold)
+            return LogThreshold(input_length, threshold)
         case 'nonrobust':
             return Nonrobust(input_length, output_length, threshold)

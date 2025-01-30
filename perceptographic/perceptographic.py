@@ -12,7 +12,7 @@ from perceptographic import pph
 class Perceptographic:
 
     def __init__(self, perceptual_algorithm='phash', pph_algorithm='nonrobust',
-                       perceptual_length=256, threshold=100, pph_length=64):
+                       perceptual_length=256, pph_length=64, threshold=100):
         # setup perceptual hash function
         # check if it is already an object, otherwise make the object
         if isinstance(perceptual_algorithm, perceptual.Perceptual):
@@ -23,7 +23,7 @@ class Perceptographic:
         # setup property-preserving hash function
         # check if it is already an object, otherwise make the object
         if isinstance(pph_algorithm, pph.PPH):
-            self.pph_algorithm = pph_algorith
+            self.pph_algorithm = pph_algorithm
         else:
             self.pph_algorithm = pph.create(pph_algorithm, perceptual_length, pph_length, threshold)
     

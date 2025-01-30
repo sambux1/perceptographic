@@ -61,9 +61,8 @@ def hex_to_point(h):
 
 class LogThreshold(PPH):
 
-    def __init__(self, input_length, output_length, threshold):
+    def __init__(self, input_length, threshold):
         self.input_length = input_length
-        self.output_length = output_length
         self.threshold = threshold
         self.sample()
         self.precompute_hash_table()

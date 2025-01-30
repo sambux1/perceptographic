@@ -28,7 +28,7 @@ class PHash(Perceptual):
         return self.hash_size * self.hash_size
 
     # input is a perceptographic.Image object
-    def hash(self, img, as_hex=False):
+    def hash(self, img, as_hex=True):
         img = img.get_pil_image()
         h = self.to_hex(phash(img, self.hash_size).hash)
         ret = self.to_np_binary(h) if as_hex is False else h

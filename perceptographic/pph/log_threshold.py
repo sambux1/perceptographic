@@ -33,6 +33,31 @@ def generate_pedersen_hash_function(n):
     
     return h
 
+# helper function to convert an ecpy.curves.Point to hex
+def point_to_hex(point):
+    assert(isinstance(point, Point))
+    x = hex(point.x)
+    y = hex(point.y)
+    return x + y[2:]    # ignore the leading '0x' of the second string
+
+# helper function to convert a hex string to an ecpy.curves.Point
+def hex_to_point(h):
+    assert(isinstance(h, str))
+    h = h[2:]   # ignore the leading '0x'
+
+    # separate the hex into the x and y coordinates
+    half_bitwidth = int(len(h) / 2)
+    x = h[: half_bitwidth]
+    y = h[half_bitwidth :]
+    
+    # convert hex strings to integers
+    x = int(x, 16)
+    y = int(y, 16)
+
+    # create point from coordinates
+    curve = Curve.get_curve('secp256k1')
+    return Point(x, y, curve)
+
 
 class LogThreshold(PPH):
 
@@ -66,15 +91,16 @@ class LogThreshold(PPH):
                     self.error_hashes.append(self.pedersen(error_vector))
 
     def hash(self, x):
-        return self.pedersen(x)
-        #TODO: to hex and back
+        h = self.pedersen(x)
+        return point_to_hex(h)
     
     def evaluate(self, y1, y2):
-        #TODO: get points from hex
+        y1 = hex_to_point(y1)
+        y2 = hex_to_point(y2)
+        
         y3 = y1 - y2
         for error in self.error_hashes:
             if y3 == error:
-                print('MATCH FOUND')
-                return
+                return True
 
-        print('no match found')
+        return False

@@ -63,8 +63,6 @@ n = 500
 x1 = np.random.randint(0, 2, size=(n))
 x2 = x1.copy()
 x2[47] = 1 - x2[47]#np.random.randint(0, 2, size=(n))
-print(x1.sum())
-print(x2.sum())
 x3 = x1 + x2
 
 pph = perceptographic.pph.LogThreshold(n, 10, 1)
@@ -72,8 +70,8 @@ p1 = pph.hash(x1)
 p2 = pph.hash(x2)
 #p3 = hcrhf.hash(x3)
 
-pph.evaluate(p1, p2)
-pph.evaluate(p2, p1)
+print(pph.evaluate(p1, p2))
+print(pph.evaluate(p2, p1))
 
 #p = perceptographic.Perceptographic('phash', 'hcrhf', 256, 200, 256)
 

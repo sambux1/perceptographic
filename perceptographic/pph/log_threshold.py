@@ -1,7 +1,7 @@
 from perceptographic.pph import PPH
 import perceptographic.common as common
 import numpy as np
-import random
+import secrets
 from itertools import combinations, product
 from ecpy.curves import Curve, Point
 
@@ -11,7 +11,7 @@ def generate_pedersen_hash_function(n):
     curve = Curve.get_curve('secp256k1')
     generator = curve.generator
     order = curve.order
-    rand_scaling_constants = [random.randrange(0, order) for i in range(n)]
+    rand_scaling_constants = [secrets.randbelow(order) for i in range(n)]
     random_group_elements = []
     for const in rand_scaling_constants:
         random_group_elements.append(const * generator)

@@ -1,8 +1,9 @@
 from perceptographic.pph import PPH
 import perceptographic.common as common
 import numpy as np
-import secrets
 from itertools import combinations, product
+import msgpack
+import secrets
 from ecpy.curves import Curve, Point
 
 
@@ -65,12 +66,12 @@ class LogThreshold(PPH):
         self.input_length = input_length
         self.threshold = threshold
         self.sample()
-        self.precompute_hash_table()
+        self.precompute_hash_list()
 
     def sample(self):
         self.pedersen = generate_pedersen_hash_function(self.input_length)
 
-    def precompute_hash_table(self):
+    def precompute_hash_list(self):
         self.error_hashes = []
 
         # append the hash of the zero error vector
@@ -103,3 +104,14 @@ class LogThreshold(PPH):
                 return True
 
         return False
+
+    def save_description(self):
+        points_hex = [point_to_hex(p) for p in self.error_hashes if not p.is_infinity]
+
+        with open("log_threshold.msgpack", "wb") as f:
+            msgpack.pack(points_hex, f)
+    
+    def load_from_description(self):
+        with open("log_threshold.msgpack", "rb") as f:
+            points_hex = msgpack.unpack(f, raw=False)
+            #TODO: can't load points from hex without saving the correct Pedersen hash function

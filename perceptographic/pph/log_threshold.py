@@ -37,14 +37,14 @@ def generate_pedersen_hash_function(n):
 # helper function to convert an ecpy.curves.Point to hex
 def point_to_hex(point):
     assert(isinstance(point, Point))
-    x = hex(point.x)
-    y = hex(point.y)
-    return x + y[2:]    # ignore the leading '0x' of the second string
+    # pad to 64 hex chars to avoid dropping leading zeros
+    x = format(point.x, '064x')
+    y = format(point.y, '064x')
+    return x + y
 
 # helper function to convert a hex string to an ecpy.curves.Point
 def hex_to_point(h):
     assert(isinstance(h, str))
-    h = h[2:]   # ignore the leading '0x'
 
     # separate the hex into the x and y coordinates
     half_bitwidth = int(len(h) / 2)
@@ -114,4 +114,4 @@ class LogThreshold(PPH):
     def load_from_description(self):
         with open("log_threshold.msgpack", "rb") as f:
             points_hex = msgpack.unpack(f, raw=False)
-            #TODO: can't load points from hex without saving the correct Pedersen hash function
+            self.error_hashes = [hex_to_point(p) for p in points_hex]

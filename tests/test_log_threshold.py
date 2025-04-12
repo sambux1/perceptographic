@@ -39,15 +39,18 @@ class TestLogThreshold(TestCase):
         curve = Curve.get_curve('secp256k1')
         generator = curve.generator
         order = curve.order
-        scaling_factor = random.randrange(0, order)
-        point = scaling_factor * generator
-        
-        # point to hex and back to point
-        h = log_threshold.point_to_hex(point)
-        ret = log_threshold.hex_to_point(h)
 
-        # check that result point is identical to original point
-        self.assertTrue(point == ret)
+        # test many to avoid probabilistic failures
+        for i in range(1000):
+            scaling_factor = random.randrange(0, order)
+            point = scaling_factor * generator
+            
+            # point to hex and back to point
+            h = log_threshold.point_to_hex(point)
+            ret = log_threshold.hex_to_point(h)
+
+            # check that result point is identical to original point
+            self.assertTrue(point == ret)
     
     # test the correctness of the hash function
     def test_correctness(self):

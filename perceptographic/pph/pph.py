@@ -28,6 +28,14 @@ class PPH(ABC):
     def evaluate(self, y1, y2):
         pass
     
+    @abstractmethod
+    def save_description(self):
+        pass
+    
+    @abstractmethod
+    def load_from_description(self):
+        pass
+    
     # convert binary numpy array to hex string for clean output representation
     @staticmethod
     def to_hex(h):
